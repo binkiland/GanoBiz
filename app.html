@@ -1,0 +1,402 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <script type="text/javascript" src="./jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/loading.css" />
+
+  <style>
+    
+    /* ==============================================================================================
+    SED Innovations
+    https://sed.am
+    https://mkrtchyan.ga
+    ================================================================================================= */
+    header {
+      color: black !important;
+      display: block;
+      font: 14px/1.3 Arial, sans-serif;
+      height: 50px;
+      position: relative;
+      z-index: 5;
+    }
+
+    h2 {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    header h2 {
+      font-size: 22px;
+      margin: 0 auto;
+      padding: 10px 0;
+      width: 80%;
+      text-align: center;
+    }
+
+    header a,
+    a:visited {
+      text-decoration: none;
+      color: #fcfcfc;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+      margin: 0 !important;
+      display: flex;
+      flex-direction: column;
+      background:white !important;
+    }
+
+    iframe,
+    webview {
+      flex-grow: 1;
+      width: 100%;
+      height: 100%;
+      border: none;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      z-index: 9;
+    }
+
+    div.vertical-line {
+      width: 1px;
+      /* Line width */
+      background-color: #cccccc;
+      /* Line color */
+      height: 100%;
+      /* Override in-line if you want specific height. */
+      float: left;
+      left: 40px;
+      top: 6px;
+      position: absolute;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #closeBtn {
+      height: 24px;
+      width: 24px;
+      padding-right: 4px;
+      padding-left: 4px;
+      transition: all .2s ease, background .3s;
+      z-index: 9;
+    }
+
+    #closeBtn:hover {
+      background: #E81123;
+    }
+
+    #maxBtn {
+      height: 24px;
+      width: 24px;
+      padding-right: 4px;
+      padding-left: 4px;
+      transition: all .2s ease;
+      z-index: 9;
+    }
+
+    #maxBtn:hover {
+      background: #C1C1C1;
+    }
+
+    #disabledMaxBtn {
+      height: 24px;
+      width: 24px;
+      padding-right: 4px;
+      padding-left: 4px;
+      opacity: 50%;
+      transition: all .2s ease;
+      z-index: 9;
+    }
+
+    #restoreBtn {
+      height: 24px;
+      width: 24px;
+      padding-right: 4px;
+      padding-left: 4px;
+      transition: all .2s ease;
+      z-index: 9;
+    }
+
+    #restoreBtn:hover {
+      background: #C1C1C1;
+    }
+
+
+    #minBtn {
+      height: 24px;
+      width: 24px;
+      padding-right: 4px;
+      padding-left: 4px;
+      transition: all .5s ease;
+      z-index: 9;
+    }
+
+    #minBtn:hover {
+      background: #C1C1C1;
+    }
+
+    .loader-overlay {
+      position: fixed;
+      left: 0px;
+      top: 24px;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      background: white;
+    }
+
+    .loader {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: calc((100vh / 2) - 30px - 40px);
+      left: calc((100vw / 2) - 40px);
+    }
+
+    /* search bar styles */
+
+    #searchForm {
+      z-index: 99999;
+      height: 0px;
+      transform: translate(100%, -50%);
+      position: relative;
+      top: 11px;
+      margin-right: 9px;
+      display: none;
+    }
+
+    #searchForm.on {
+      width: 300px;
+      -webkit-animation-name: in-out;
+      animation-name: in-out;
+      -webkit-animation-duration: 0.7s;
+      animation-duration: 0.7s;
+      -webkit-animation-timing-function: linear;
+      animation-timing-function: linear;
+      -webkit-animation-iteration-count: 1;
+      animation-iteration-count: 1;
+    }
+
+    input {
+      z-index: 15;
+      box-sizing: border-box;
+      padding-left: 11px;
+      width: 14px;
+      height: 15px;
+      border: 1px solid black;
+      border-radius: 50%;
+      background: none;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 400;
+      font-family: Roboto;
+      outline: 0;
+      -webkit-transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out,
+        0.2s;
+      transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out,
+        0.2s;
+      -webkit-transition-delay: 0.4s;
+      transition-delay: 0.4s;
+      -webkit-transform: translate(-100%, -50%);
+      -ms-transform: translate(-100%, -50%);
+      transform: translate(-100%, -50%);
+    }
+
+    .search {
+      background: none;
+      position: absolute;
+      top: 0px;
+      left: 0;
+      height: 18px;
+      width: 18px;
+      padding: 0;
+      border-radius: 100%;
+      outline: 0;
+      border: 0;
+      color: inherit;
+      cursor: pointer;
+      -webkit-transition: 0.2s ease-in-out;
+      transition: 0.2s ease-in-out;
+      -webkit-transform: translate(-100%, -50%);
+      -ms-transform: translate(-100%, -50%);
+      transform: translate(-100%, -50%);
+    }
+
+    .search:before {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 1px;
+      background-color: black;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+      margin-top: 8px;
+      margin-left: 6px;
+      -webkit-transition: 0.2s ease-in-out;
+      transition: 0.2s ease-in-out;
+    }
+
+    .close {
+      -webkit-transition: 0.4s ease-in-out;
+      transition: 0.4s ease-in-out;
+      -webkit-transition-delay: 0.4s;
+      transition-delay: 0.4s;
+    }
+
+    .close:before {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 1px;
+      margin-top: -1px;
+      margin-left: -9px;
+      background-color: #000;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+      -webkit-transition: 0.2s ease-in-out;
+      transition: 0.2s ease-in-out;
+    }
+
+    .close:after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 1px;
+      background-color: #000;
+      margin-top: -1px;
+      margin-left: -9px;
+      cursor: pointer;
+      -webkit-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+    }
+
+    .square {
+      z-index: 999;
+      box-sizing: border-box;
+      padding: 0 40px 0 10px;
+      width: 300px;
+      height: 23px;
+      border: 1px solid #000;
+      border-radius: 0;
+      background: none;
+      color: #000;
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 400;
+      outline: 0;
+      -webkit-transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out,
+        padding 0.2s;
+      transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out,
+        padding 0.2s;
+      -webkit-transition-delay: 0.4s, 0s, 0.4s;
+      transition-delay: 0.4s, 0s, 0.4s;
+      -webkit-transform: translate(-100%, -50%);
+      -ms-transform: translate(-100%, -50%);
+      transform: translate(-100%, -50%);
+    }
+  </style>
+
+  <!-- TODO: The auto update script: <script src="./updater2.js"></script> -->
+
+</head>
+
+<body>
+
+  <div id="parent-container"  
+    style="z-index:999 ;display:flex; position: sticky; height:25px; width:100%; background:#e0e0e0; align-items: center;">
+    <a style="-webkit-app-region: no-drag; z-index: 9; margin-left:5px;">
+      <div style="display: flex; user-select:none; align-items: center; height:20px;">
+        <img src="./imgs/appIcon.png" width="20px" height="20px" />
+        <div id="app-header-name" style="padding-top: 1px; margin-left: 5px;font-size: 0.8em;font-family: sans-serif;" > </div>
+      </div>
+    </a>
+
+    <div id="container" style="flex:1; height: 100%; z-index: 10; -webkit-app-region: drag;">
+    </div>
+
+    <div style="display:flex; -webkit-app-region: no-drag;">
+      <form id="searchForm" action="javascript:void(0);" onsubmit="doNothing()">
+        <input type="text" placeholder="Search the web" name="input" class="input" id="search-input"></input>
+        <button type="reset" class="search" id="search-btn"></button>
+      </form>
+
+      <a id="minBtn" draggable="false" href="javascript:void(0)" style="cursor: default">
+        <img src="./imgs/minimize.png" width="100%" height="100%" />
+      </a>
+      <a id="maxBtn" draggable="false" href="javascript:void(0)" style="cursor: default">
+        <img src="./imgs/expand.png" width="100%" height="100%" />
+      </a>
+
+      <a id="disabledMaxBtn" draggable="false" class="hidden" href="javascript:void(0)" style="cursor: not-allowed">
+        <img src="./imgs/expand.png" width="100%" height="100%" />
+      </a>
+
+      <a id="restoreBtn" draggable="false" class="hidden" href="javascript:void(0)" style="cursor: default">
+        <img src="./imgs/expand.png" width="100%" height="100%" />
+      </a>
+
+      <a id="closeBtn" draggable="false" href="javascript:void(0)" style="cursor: default ; z-index: 15;">
+        <img src="./imgs/close.png" width="100%" height="100%" />
+      </a>
+    </div>
+  </div>
+
+  <iframe id="templerFrame" nwfaketop src="about:blank"></iframe>
+
+  <div class="loader-overlay">
+    <div class="loader">
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    // updated
+    const input = document.getElementById("search-input");
+    const searchBtn = document.getElementById("search-btn");
+
+    const expand = () => {
+      searchBtn.classList.toggle("close");
+      input.classList.toggle("square");
+      input.focus();
+    };
+
+    // TODO: temporary removed the mouseover in the search box:
+    //searchBtn.addEventListener("mouseover", expand);
+    searchBtn.addEventListener("click", expand);
+
+    function doNothing() {
+      return false;
+    };
+
+    $(document).ready(function () {
+      var templerFrame = document.getElementById('templerFrame');
+
+      templerFrame.addEventListener('load', function () {
+        $('.loader-overlay').fadeOut('slow');
+      });
+    });
+  </script>
+
+</body>
+
+</html>
